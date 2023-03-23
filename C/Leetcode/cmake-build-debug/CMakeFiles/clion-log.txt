@@ -1,4 +1,4 @@
-"D:\C++IDE\CLion 2022.2.3\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" -S D:\CodeFiles\C++\LeetCode -B D:\CodeFiles\C++\LeetCode\cmake-build-debug
+"D:\C++IDE\CLion 2022.2.3\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=D:/C++IDE/CLion 2022.2.3/bin/ninja/win/ninja.exe" -G Ninja -S D:\CodeFiles\Codes\C\Leetcode -B D:\CodeFiles\Codes\C\Leetcode\cmake-build-debug
 -- The C compiler identification is GNU 11.2.0
 -- The CXX compiler identification is GNU 11.2.0
 -- Detecting C compiler ABI info
@@ -13,4 +13,4 @@
 -- Detecting CXX compile features - done
 -- Configuring done
 -- Generating done
--- Build files have been written to: D:/CodeFiles/C++/LeetCode/cmake-build-debug
+-- Build files have been written to: D:/CodeFiles/Codes/C/Leetcode/cmake-build-debug
