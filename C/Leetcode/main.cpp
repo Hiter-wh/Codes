@@ -1,56 +1,59 @@
 #include <iostream>
 #include <vector>
-#include <climits>
+#include <algorithm>
 using namespace std;
 
+vector<int> bit;
+
+// Update function for the binary indexed tree
+void update(int index, int value) {
+    while (index < bit.size()) {
+        bit[index] = max(bit[index], value);
+        index += index & -index;
+    }
+}
+
+// Query function for the binary indexed tree
+int query(int index) {
+    int result = 0;
+    while (index > 0) {
+        result = max(result, bit[index]);
+        index -= index & -index;
+    }
+    return result;
+}
+
 int main() {
-    vector<int> prices(9);
-    int M;
+    int n;
+    cin >> n;
 
-    // Read the total money amount
-    cin >> M;
-
-    // Read prices of numbers 1 to 9
-    for (int i = 0; i < 9; ++i) {
-        cin >> prices[i];
+    vector<int> nums(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> nums[i];
     }
 
-
-
-    // Find the cheapest digit and its cost
-    int cheapest_digit = -1;
-    int min_cost = INT_MAX;
-    for (int i = 0; i < 9; ++i) {
-        if (prices[i] < min_cost) {
-            min_cost = prices[i];
-            cheapest_digit = i + 1;
-        }
+    // Compress the input array to handle large numbers efficiently
+    vector<int> sorted_nums = nums;
+    sort(sorted_nums.begin(), sorted_nums.end());
+    for (int i = 0; i < n; ++i) {
+        nums[i] = lower_bound(sorted_nums.begin(), sorted_nums.end(), nums[i]) - sorted_nums.begin() + 1;
     }
 
-    // Calculate the maximum length of the resulting number
-    int max_length = M / min_cost;
+    // Initialize the binary indexed tree with size n+1
+    bit.resize(n + 1, 0);
 
-    // If it's not possible to buy any number
-    if (max_length == 0) {
-        cout << -1 << endl;
-        return 0;
-    }
+    // Iterate through the compressed input array
+    int result = 0;
+    for (int i = 0; i < n; ++i) {
+        // Find the maximum sum of a strictly increasing subarray ending at the current element
+        int max_sum = query(nums[i] - 1) + sorted_nums[nums[i] - 1];
+        result = max(result, max_sum);
 
-    // Replace the digits with more expensive ones while maintaining the affordability
-    string result(max_length, '0' + cheapest_digit);
-    int remaining_money = M - max_length * min_cost;
-
-    for (int i = 0; i < max_length; ++i) {
-        for (int j = 8; j >= 0; --j) {
-            int extra_cost = prices[j] - min_cost;
-            if (remaining_money >= extra_cost) {
-                remaining_money -= extra_cost;
-                result[i] = '1' + j;
-                break;
-            }
-        }
+        // Update the binary indexed tree with the current element's maximum sum
+        update(nums[i], max_sum);
     }
 
     cout << result << endl;
+
     return 0;
 }
